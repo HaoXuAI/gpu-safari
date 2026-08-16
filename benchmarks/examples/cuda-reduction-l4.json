@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "experiment": {"id": "cuda/reduction", "implementation": "cub_device_reduce"},
+  "source": {"revision": "f932b741aee26b22c92111f987265e5132e5e1d5"},
+  "accelerator": {"vendor": "NVIDIA", "model": "NVIDIA L4", "count": 1},
+  "platform": {"provider": "Modal"},
+  "software": {"cuda": "12.8.1", "compiler": "nvcc 12.8"},
+  "workload": {"elements": 1048576, "dtype": "float32"},
+  "correctness": {"passed": true},
+  "measurements": [
+    {"name": "latency", "value": 0.005704, "unit": "ms"},
+    {"name": "effective_bandwidth", "value": 735.0, "unit": "GB/s"}
+  ]
+}

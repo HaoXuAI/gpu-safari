@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gpu-safari.dev/schemas/result-v1.schema.json",
+  "type": "object",
+  "required": ["schema_version", "experiment", "source", "accelerator", "software", "workload", "correctness", "measurements"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment": {
+      "type": "object",
+      "required": ["id", "implementation"],
+      "properties": {"id": {"type": "string", "minLength": 1}, "implementation": {"type": "string", "minLength": 1}},
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": ["revision"],
+      "properties": {"revision": {"type": "string", "minLength": 7}},
+      "additionalProperties": false
+    },
+    "accelerator": {
+      "type": "object",
+      "required": ["vendor", "model", "count"],
+      "properties": {"vendor": {"type": "string", "minLength": 1}, "model": {"type": "string", "minLength": 1}, "architecture": {"type": "string"}, "count": {"type": "integer", "minimum": 1}},
+      "additionalProperties": false
+    },
+    "platform": {
+      "type": "object",
+      "required": ["provider"],
+      "properties": {"provider": {"type": "string", "minLength": 1}, "instance": {"type": "string"}, "elapsed_seconds": {"type": "number", "minimum": 0}, "estimated_cost_usd": {"type": "number", "minimum": 0}},
+      "additionalProperties": false
+    },
+    "software": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string"}},
+    "workload": {"type": "object", "minProperties": 1},
+    "correctness": {
+      "type": "object",
+      "required": ["passed"],
+      "properties": {"passed": {"type": "boolean"}, "tolerance": {"type": "number", "minimum": 0}},
+      "additionalProperties": false
+    },
+    "measurements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "value", "unit"],
+        "properties": {"name": {"type": "string", "minLength": 1}, "value": {"type": "number"}, "unit": {"type": "string", "minLength": 1}},
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

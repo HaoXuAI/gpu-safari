@@ -1,39 +1,29 @@
-# GPU Kernel Lab on Modal
+# GPU Safari
 
-This lab verifies the CUDA stack and compares four sum reductions on an L4:
-naive atomic accumulation, shared-memory tree reduction, warp shuffles, and
-CUB's production `DeviceReduce` implementation.
+> A hands-on expedition through parallel computing—from CUDA, ROCm, MLX, and Triton kernels to AI workloads on local and cloud GPUs.
 
-## One-time setup
+GPU Safari is a vendor-neutral curriculum and experiment gallery. Start with a guided learning path or choose a self-contained experiment.
 
-```bash
-python3 -m pip install -r requirements-dev.txt
-python3 -m modal setup
-```
+## Start here
 
-The Modal dashboard currently provides $30 monthly Starter credit. Keep the
-workspace usage limit enabled; this account was observed with a $5 limit.
+- Learn the foundations: execution models, memory, correctness, profiling, and benchmarking.
+- Run the first experiment: [CUDA reduction](experiments/cuda/reduction/README.md).
+- Choose an execution platform: local instructions or a maintained cloud launcher.
+- Build toward complete workloads in the application challenges.
 
-## Verify without using a GPU
+## Ecosystems
 
-```bash
-python3 -m pytest -q
-python3 -m modal --version
-```
+| Track | Phase 1 status |
+| --- | --- |
+| CUDA | First reduction experiment |
+| Triton | Planned comparison track |
+| ROCm | Planned starter experiment |
+| MLX | Planned Apple Silicon experiment |
 
-## Run the L4 smoke test
+## Safe execution
 
-This launches billable GPU compute and normally completes in a few minutes:
+CPU-only validation is available for repository contracts and result tooling. GPU commands are always explicit and may consume quotas or incur charges. Review the selected accelerator and provider limits before launching a benchmark.
 
-```bash
-modal run modal_cuda.py
-```
+## Contributing
 
-The function has a 10-minute timeout, a 2-second scale-down window, and no warm
-containers. It should print `nvidia-smi`, `nvcc --version`, and `deviceQuery`
-results followed by correctness and CUDA-event benchmark CSV before scaling to
-zero. The cases include empty input, non-power-of-two sizes, block boundaries,
-and one million deterministic random values.
-
-Use L4 for routine CUDA and Triton work. Change `gpu="L4"` to `gpu="A100-40GB"`
-only for architecture-specific experiments, and return it to L4 afterward.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [experiment template](contributor-guide/experiment-template.md). A new experiment needs one reproducible backend; support for every cloud is not required.
