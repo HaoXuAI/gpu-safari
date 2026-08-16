@@ -8,6 +8,7 @@ GPU Safari is a vendor-neutral curriculum and experiment gallery. Start with a g
 
 - Learn the foundations: execution models, memory, correctness, profiling, and benchmarking.
 - Run the first experiment: [CUDA reduction](experiments/cuda/reduction/README.md).
+- Continue with [CUDA matrix multiplication](experiments/cuda/matmul/README.md).
 - Choose an execution platform: local instructions or a maintained cloud launcher.
 - Build toward complete workloads in the application challenges.
 
@@ -15,7 +16,7 @@ GPU Safari is a vendor-neutral curriculum and experiment gallery. Start with a g
 
 | Track | Phase 1 status |
 | --- | --- |
-| CUDA | First reduction experiment |
+| CUDA | Reduction and matrix multiplication experiments |
 | Triton | Planned comparison track |
 | ROCm | Planned starter experiment |
 | MLX | Planned Apple Silicon experiment |
