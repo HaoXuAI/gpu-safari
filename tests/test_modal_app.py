@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-APP = Path(__file__).parents[1] / "modal_cuda.py"
+APP = Path(__file__).parents[1] / "platforms" / "modal" / "reduction.py"
 REDUCTION = (
     Path(__file__).parents[1]
     / "experiments"
@@ -22,8 +22,15 @@ def test_modal_cuda_app_is_cost_bounded():
 
 def test_modal_cuda_app_checks_the_gpu_stack():
     source = APP.read_text()
-    for command in ("nvidia-smi", "nvcc --version", "deviceQuery"):
+    for command in ("nvidia-smi", "nvcc", "deviceQuery"):
         assert command in source
+
+
+def test_modal_cuda_app_uses_result_contract():
+    source = APP.read_text()
+    assert "parse_reduction_csv" in source
+    assert "build_reduction_result" in source
+    assert 'modal.App("gpu-safari-cuda-reduction")' in source
 
 
 def test_reduction_lab_contains_four_implementations():
