@@ -1,0 +1,9 @@
+[
+  {"name": "zero_m", "m": 0, "n": 17, "k": 9, "warmup": 0, "iterations": 1},
+  {"name": "scalar", "m": 1, "n": 1, "k": 1, "warmup": 2, "iterations": 10},
+  {"name": "small_rectangular", "m": 7, "n": 5, "k": 3, "warmup": 2, "iterations": 10},
+  {"name": "sub_tile", "m": 15, "n": 15, "k": 15, "warmup": 2, "iterations": 10},
+  {"name": "awkward", "m": 31, "n": 17, "k": 29, "warmup": 3, "iterations": 20},
+  {"name": "square_512", "m": 512, "n": 512, "k": 512, "warmup": 5, "iterations": 50},
+  {"name": "rectangular_256_1024_128", "m": 256, "n": 1024, "k": 128, "warmup": 5, "iterations": 50}
+]
