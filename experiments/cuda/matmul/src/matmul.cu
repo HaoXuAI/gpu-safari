@@ -26,6 +26,7 @@ struct MatmulCase {
   int m;
   int n;
   int k;
+  std::string precision;
   int warmup;
   int iterations;
 };
@@ -79,7 +80,7 @@ std::vector<MatmulCase> load_cases(const std::string& path) {
   }
 
   const std::set<std::string> required_fields{
-      "name", "m", "n", "k", "warmup", "iterations"};
+      "name", "m", "n", "k", "precision", "warmup", "iterations"};
   std::vector<MatmulCase> cases;
   cases.reserve(document.size());
   for (std::size_t index = 0; index < document.size(); ++index) {
@@ -102,12 +103,18 @@ std::vector<MatmulCase> load_cases(const std::string& path) {
       throw std::invalid_argument("case " + std::to_string(index) +
                                   " name must be non-empty");
     }
+    if (!entry.at("precision").is_string() ||
+        entry.at("precision").get_ref<const std::string&>() != "float32") {
+      throw std::invalid_argument("case " + std::to_string(index) +
+                                  " precision must be float32");
+    }
 
     MatmulCase parsed{
         entry.at("name").get<std::string>(),
         read_nonnegative_int(entry, "m", index),
         read_nonnegative_int(entry, "n", index),
         read_nonnegative_int(entry, "k", index),
+        entry.at("precision").get<std::string>(),
         read_nonnegative_int(entry, "warmup", index),
         read_nonnegative_int(entry, "iterations", index),
     };

@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 
-FIELDS = {"name", "m", "n", "k", "warmup", "iterations"}
+FIELDS = {"name", "m", "n", "k", "precision", "warmup", "iterations"}
 
 
 def load_matmul_cases(path: Path) -> list[dict[str, int | str]]:
@@ -15,6 +15,8 @@ def load_matmul_cases(path: Path) -> list[dict[str, int | str]]:
             raise ValueError(f"case {index} fields must equal {sorted(FIELDS)}")
         if not isinstance(case["name"], str) or not case["name"]:
             raise ValueError(f"case {index} name must be non-empty")
+        if case["precision"] != "float32":
+            raise ValueError(f"case {index} precision must be float32")
         for field in ("m", "n", "k", "warmup", "iterations"):
             if type(case[field]) is not int:
                 raise ValueError(f"case {index} {field} must be an integer")

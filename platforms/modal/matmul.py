@@ -4,10 +4,32 @@ Run with: modal run platforms/modal/matmul.py
 """
 
 import json
+import shlex
 import subprocess
 from pathlib import Path
 
 import modal
+
+
+def run_checked(*command: str) -> str:
+    """Run a launcher command and preserve its diagnostics on failure."""
+    completed = subprocess.run(
+        command,
+        check=False,
+        text=True,
+        capture_output=True,
+    )
+    if completed.returncode != 0:
+        stdout = completed.stdout.rstrip() or "<empty>"
+        stderr = completed.stderr.rstrip() or "<empty>"
+        rendered_command = shlex.join(command)
+        raise RuntimeError(
+            f"launcher command failed with exit code {completed.returncode}\n"
+            f"command: {rendered_command}\n"
+            f"stdout:\n{stdout}\n"
+            f"stderr:\n{stderr}"
+        )
+    return completed.stdout.strip()
 
 
 if modal.is_local():
@@ -60,18 +82,17 @@ def run_matmul(revision: str) -> dict[str, object]:
     work = Path("/tmp/gpu-safari")
     work.mkdir(exist_ok=True)
 
-    def run(*command: str) -> str:
-        return subprocess.run(command, check=True, text=True, capture_output=True).stdout.strip()
-
-    gpu_model = run("nvidia-smi", "--query-gpu=name", "--format=csv,noheader")
-    cuda_version = run("nvcc", "--version")
+    gpu_model = run_checked(
+        "nvidia-smi", "--query-gpu=name", "--format=csv,noheader"
+    )
+    cuda_version = run_checked("nvcc", "--version")
     compiler_version = cuda_version.splitlines()[-1]
     binary = work / "matmul"
-    run(
+    run_checked(
         "nvcc", "-O3", "--use_fast_math", "-std=c++17", "-arch=sm_89",
         "/opt/gpu-safari/matmul.cu", "-lcublas", "-o", str(binary),
     )
-    output = run(str(binary), "/opt/gpu-safari/cases.json")
+    output = run_checked(str(binary), "/opt/gpu-safari/cases.json")
     print(output)
     return build_matmul_result(
         parse_matmul_csv(output),
@@ -85,10 +106,5 @@ def run_matmul(revision: str) -> dict[str, object]:
 
 @app.local_entrypoint()
 def main():
-    revision = subprocess.run(
-        ("git", "-C", str(ROOT), "rev-parse", "HEAD"),
-        check=True,
-        text=True,
-        capture_output=True,
-    ).stdout.strip()
+    revision = run_checked("git", "-C", str(ROOT), "rev-parse", "HEAD")
     print(json.dumps(run_matmul.remote(revision), indent=2, sort_keys=True))
