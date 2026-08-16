@@ -2,7 +2,14 @@ from pathlib import Path
 
 
 APP = Path(__file__).parents[1] / "modal_cuda.py"
-REDUCTION = Path(__file__).parents[1] / "cuda" / "reduction.cu"
+REDUCTION = (
+    Path(__file__).parents[1]
+    / "experiments"
+    / "cuda"
+    / "reduction"
+    / "src"
+    / "reduction.cu"
+)
 
 
 def test_modal_cuda_app_is_cost_bounded():
