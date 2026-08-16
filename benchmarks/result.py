@@ -70,9 +70,15 @@ def build_reduction_result(
 
 
 def parse_matmul_csv(output: str) -> list[dict[str, object]]:
-    lines = [line.strip() for line in output.splitlines() if line.strip()]
-    if not lines or lines[-1] != "ALL MATMUL CORRECTNESS CHECKS PASSED":
+    output_lines = output.splitlines()
+    nonempty_indices = [index for index, line in enumerate(output_lines) if line.strip()]
+    if not nonempty_indices or output_lines[nonempty_indices[-1]].strip() != "ALL MATMUL CORRECTNESS CHECKS PASSED":
         raise ValueError("matmul output did not pass correctness checks")
+    first_nonempty = nonempty_indices[0]
+    sentinel_index = nonempty_indices[-1]
+    if any(not line.strip() for line in output_lines[first_nonempty:sentinel_index]):
+        raise ValueError("matmul output did not pass correctness checks")
+    lines = [line.strip() for line in output_lines[first_nonempty:sentinel_index]]
 
     fields = [
         "implementation",
@@ -85,7 +91,7 @@ def parse_matmul_csv(output: str) -> list[dict[str, object]]:
         "max_rel_error",
         "status",
     ]
-    rows = csv.DictReader(io.StringIO("\n".join(lines[:-1])))
+    rows = csv.DictReader(io.StringIO("\n".join(lines)))
     if rows.fieldnames != fields:
         raise ValueError("matmul output did not pass correctness checks")
 

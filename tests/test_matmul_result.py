@@ -30,6 +30,15 @@ def test_parse_matmul_csv_rejects_failed_correctness(text):
         parse_matmul_csv(text)
 
 
+def test_parse_matmul_csv_rejects_empty_result_row():
+    output = VALID.replace(
+        "tiled,31,17,29,0.008000,0.003820,0.000001,0.000002,PASS\n",
+        "\n",
+    )
+    with pytest.raises(ValueError, match="did not pass correctness checks"):
+        parse_matmul_csv(output)
+
+
 def test_build_matmul_result_selects_largest_cublas_case():
     document = build_matmul_result(
         parse_matmul_csv(VALID),
