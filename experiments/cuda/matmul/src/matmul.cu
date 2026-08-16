@@ -292,6 +292,11 @@ int main(int argc, char** argv) {
       }
 
       for (Implementation implementation : implementations) {
+        if (c_elements != 0) {
+          // All-one FP32 bit patterns are NaNs, so an unwritten element fails.
+          CUDA_CHECK(cudaMemsetAsync(device_c, 0xFF,
+                                     c_elements * sizeof(float), stream));
+        }
         launch(implementation, cublas, device_a, device_b, device_c,
                test_case.m, test_case.n, test_case.k, stream);
         CUDA_CHECK(cudaDeviceSynchronize());
