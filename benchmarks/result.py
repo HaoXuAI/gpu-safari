@@ -67,3 +67,85 @@ def build_reduction_result(
     }
     validate_result(document)
     return document
+
+
+def parse_matmul_csv(output: str) -> list[dict[str, object]]:
+    output_lines = output.splitlines()
+    nonempty_indices = [index for index, line in enumerate(output_lines) if line.strip()]
+    if not nonempty_indices or output_lines[nonempty_indices[-1]].strip() != "ALL MATMUL CORRECTNESS CHECKS PASSED":
+        raise ValueError("matmul output did not pass correctness checks")
+    first_nonempty = nonempty_indices[0]
+    sentinel_index = nonempty_indices[-1]
+    if any(not line.strip() for line in output_lines[first_nonempty:sentinel_index]):
+        raise ValueError("matmul output did not pass correctness checks")
+    lines = [line.strip() for line in output_lines[first_nonempty:sentinel_index]]
+
+    fields = [
+        "implementation",
+        "m",
+        "n",
+        "k",
+        "avg_ms",
+        "tflops",
+        "max_abs_error",
+        "max_rel_error",
+        "status",
+    ]
+    rows = csv.DictReader(io.StringIO("\n".join(lines)))
+    if rows.fieldnames != fields:
+        raise ValueError("matmul output did not pass correctness checks")
+
+    parsed = []
+    for row in rows:
+        if set(row) != set(fields) or any(value is None for value in row.values()):
+            raise ValueError("matmul output did not pass correctness checks")
+        parsed.append({
+            "implementation": row["implementation"],
+            "m": int(row["m"]),
+            "n": int(row["n"]),
+            "k": int(row["k"]),
+            "avg_ms": float(row["avg_ms"]),
+            "tflops": float(row["tflops"]),
+            "max_abs_error": float(row["max_abs_error"]),
+            "max_rel_error": float(row["max_rel_error"]),
+            "passed": row["status"] == "PASS",
+        })
+    if not parsed or not all(row["passed"] for row in parsed):
+        raise ValueError("matmul output did not pass correctness checks")
+    return parsed
+
+
+def build_matmul_result(
+    rows: list[dict[str, object]],
+    *,
+    revision: str,
+    gpu_model: str,
+    cuda_version: str,
+    compiler_version: str,
+    provider: str,
+) -> dict[str, object]:
+    candidates = [row for row in rows if row["implementation"] == "cublas"]
+    if not candidates:
+        raise ValueError("matmul output is missing cublas")
+    selected = max(candidates, key=lambda row: int(row["m"]) * int(row["n"]) * int(row["k"]))
+    document = {
+        "schema_version": "1.0.0",
+        "experiment": {"id": "cuda/matmul", "implementation": "cublas"},
+        "source": {"revision": revision},
+        "accelerator": {"vendor": "NVIDIA", "model": gpu_model, "count": 1},
+        "platform": {"provider": provider},
+        "software": {"cuda": cuda_version, "compiler": compiler_version},
+        "workload": {
+            "m": selected["m"], "n": selected["n"], "k": selected["k"],
+            "dtype": "float32",
+        },
+        "correctness": {"passed": all(bool(row["passed"]) for row in rows)},
+        "measurements": [
+            {"name": "latency", "value": selected["avg_ms"], "unit": "ms"},
+            {"name": "throughput", "value": selected["tflops"], "unit": "TFLOP/s"},
+            {"name": "max_abs_error", "value": selected["max_abs_error"], "unit": "absolute"},
+            {"name": "max_rel_error", "value": selected["max_rel_error"], "unit": "relative"},
+        ],
+    }
+    validate_result(document)
+    return document
