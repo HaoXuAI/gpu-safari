@@ -13,6 +13,7 @@ test("every lesson step has concise progressive-reveal copy", () => {
     "predict",
     "simulate",
     "code",
+    "run",
     "explain",
     "challenge",
   ]) {

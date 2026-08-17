@@ -25,3 +25,11 @@ This command also launches billable L4 compute and uses the same 10-minute
 timeout, 2-second scale-down window, and no-warm-container policy. It runs
 correctness checks before benchmarking and returns JSON valid against
 `benchmarks/schema/result-v1.schema.json`.
+
+The learning lab can also launch its 64-pixel Triton teaching kernel through
+the loopback companion server. This uses billable L4 compute and requires an
+explicit confirmation in the lab before every run:
+
+```bash
+python learning-lab/server.py
+```

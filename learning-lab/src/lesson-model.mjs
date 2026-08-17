@@ -3,6 +3,7 @@ export const LESSON_STEPS = Object.freeze([
   "predict",
   "simulate",
   "code",
+  "run",
   "explain",
   "challenge",
 ]);

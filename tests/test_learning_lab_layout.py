@@ -62,3 +62,26 @@ def test_repository_readme_links_to_the_beginner_learning_lab():
 
     assert "learning-lab/" in readme
     assert "Paint Pixels in Parallel" in readme
+
+
+def test_learning_lab_has_real_gpu_stage_and_explicit_modal_confirmation():
+    html = (LAB / "index.html").read_text()
+    app = (LAB / "src" / "app.mjs").read_text()
+
+    assert 'id="execution-mode"' in html
+    assert 'step === "run" ? "Measured execution" : "Concept simulation"' in app
+    assert 'fetch("/api/capabilities")' in app
+    assert 'fetch("/api/run"' in app
+    assert "Run on your Apple GPU" in app
+    assert "Modal uses billable NVIDIA L4 compute" in app
+    assert 'confirmed: provider === "modal-triton"' in app
+
+
+def test_mac_setup_and_cost_boundary_are_documented():
+    readme = (LAB / "README.md").read_text()
+    requirements = (LAB / "requirements-mac.txt").read_text()
+
+    assert "python learning-lab/server.py" in readme
+    assert "Apple silicon" in readme
+    assert "billable" in readme
+    assert requirements.strip() == "mlx==0.32.0"

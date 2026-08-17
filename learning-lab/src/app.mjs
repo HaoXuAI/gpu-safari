@@ -13,13 +13,17 @@ import {
   getPredictionFeedback,
 } from "./lesson-content.mjs";
 
-const STEP_LABELS = ["Story", "Predict", "Simulate", "Code", "Explain", "Challenge"];
+const STEP_LABELS = ["Story", "Predict", "Simulate", "Code", "Run", "Explain", "Challenge"];
 const state = {
   lesson: createLessonState(),
   simulationTimers: [],
   simulationHasRun: false,
   codeTab: "python",
   blockSize: 8,
+  capabilities: null,
+  executionResult: null,
+  executionError: null,
+  executionRunning: false,
 };
 
 const elements = {
@@ -27,6 +31,7 @@ const elements = {
   next: document.querySelector("#next-button"),
   content: document.querySelector("#step-content"),
   count: document.querySelector("#step-count"),
+  mode: document.querySelector("#execution-mode"),
   progress: document.querySelector("#progress-list"),
   simulation: document.querySelector("#simulation-panel"),
   grid: document.querySelector("#pixel-grid"),
@@ -124,15 +129,57 @@ function explainMarkup() {
       <article><span class="concept-icon">→</span><strong>Destination</strong><p>The thread ID maps to one pixel in memory.</p></article>
       <article><span class="concept-icon">⌁</span><strong>Boundary</strong><p>A mask stops extra workers from touching pixels outside the image.</p></article>
     </div>
-    <div class="mapping-strip"><span>Triton <code>program_id + arange</code></span><span aria-hidden="true">↔</span><span>CUDA <code>blockIdx + threadIdx</code></span><small>Both form global data offsets, but a Triton program processes a vector of lanes rather than representing one CUDA thread.</small></div>
+    <div class="mapping-strip"><span>Metal <code>grid + thread_position</code></span><span aria-hidden="true">↔</span><span>Triton <code>program_id + arange</code></span><span aria-hidden="true">↔</span><span>CUDA <code>blockIdx + threadIdx</code></span><small>Metal dispatches threads in threadgroups; a Triton program processes vector lanes; CUDA organizes individual threads into blocks. They solve the same indexing problem with different execution models.</small></div>
   </div>`;
+}
+
+function providerById(id) {
+  return state.capabilities?.providers?.find((provider) => provider.id === id);
+}
+
+function runMarkup() {
+  const apple = providerById("apple-mlx");
+  const modal = providerById("modal-triton");
+  const appleReady = apple?.available === true;
+  const modalReady = modal?.available === true;
+  return `<div class="copy-column run-column">
+    <p class="lede">The animation showed the mapping. Now choose hardware and measure a real kernel. Both backends return the same correctness and timing format.</p>
+    <div class="provider-grid">
+      <article class="provider-card">
+        <span class="provider-kind">Local · no cloud charge</span>
+        <h2>Apple GPU · MLX</h2>
+        <p>Runs a custom Metal kernel on this Mac using explicit grid and threadgroup sizes.</p>
+        <p class="provider-status ${appleReady ? "is-ready" : ""}">${apple ? (appleReady ? "Ready on this Mac" : apple.reason) : "Checking local companion…"}</p>
+        <button class="button button-primary" type="button" data-run-provider="apple-mlx" ${appleReady && !state.executionRunning ? "" : "disabled"}>Run on your Apple GPU</button>
+      </article>
+      <article class="provider-card">
+        <span class="provider-kind">Cloud · explicit confirmation</span>
+        <h2>NVIDIA L4 · Triton</h2>
+        <p>Runs the equivalent masked Triton kernel through your authenticated Modal account.</p>
+        <p class="provider-status ${modalReady ? "is-ready" : ""}">${modal ? (modalReady ? "Modal CLI detected" : modal.reason) : "Checking local companion…"}</p>
+        <label class="cost-confirm"><input id="modal-confirm" type="checkbox"> Modal uses billable NVIDIA L4 compute. I want to launch one run.</label>
+        <button class="button button-quiet" type="button" data-run-provider="modal-triton" ${modalReady && !state.executionRunning ? "" : "disabled"}>Run once on Modal</button>
+      </article>
+    </div>
+    <div id="gpu-run-status" class="gpu-run-status" aria-live="polite">${executionStatusMarkup()}</div>
+  </div>`;
+}
+
+function executionStatusMarkup() {
+  if (state.executionRunning) return "Compiling and running the kernel…";
+  if (state.executionError) return `<strong>Run unavailable</strong><span>${escapeHtml(state.executionError)}</span>`;
+  if (!state.executionResult) return "Choose an available backend when you are ready.";
+  const result = state.executionResult;
+  const latency = result.measurements[0].value;
+  return `<div class="result-heading"><span class="result-check">✓</span><div><strong>Correct output on ${escapeHtml(result.device)}</strong><span>Measured GPU execution · not simulation</span></div></div>
+    <dl class="result-grid"><div><dt>Backend</dt><dd>${escapeHtml(result.implementation)}</dd></div><div><dt>Latency</dt><dd>${latency.toFixed(4)} ms</dd></div><div><dt>Max error</dt><dd>${result.correctness.max_abs_error}</dd></div><div><dt>Checksum</dt><dd>${result.output.checksum}</dd></div></dl>`;
 }
 
 function challengeMarkup() {
   return `<div class="copy-column">
     <p class="lede">The picture still has 64 pixels. Change how many workers form a block, then rerun the same work map.</p>
     <div class="challenge-row">
-      <label for="block-size"><strong>Threads per block</strong><small>The team size changes—not the number of pixels.</small></label>
+      <label for="block-size"><strong>Teaching group size</strong><small>Metal uses a threadgroup; Triton rounds this to a power-of-two vector width; CUDA uses threads per block.</small></label>
       <select id="block-size">
         ${[4, 8, 10, 16].map((size) => `<option value="${size}" ${state.blockSize === size ? "selected" : ""}>${size}</option>`).join("")}
       </select>
@@ -163,11 +210,13 @@ function renderStep() {
     predict: predictionMarkup,
     simulate: simulationMarkup,
     code: codeMarkup,
+    run: runMarkup,
     explain: explainMarkup,
     challenge: challengeMarkup,
   }[step]();
 
   elements.count.textContent = `Step ${state.lesson.stepIndex + 1} of ${LESSON_STEPS.length}`;
+  elements.mode.textContent = step === "run" ? "Measured execution" : "Concept simulation";
   elements.content.innerHTML = `<div class="step-heading"><span class="eyebrow">${copy.eyebrow}</span><h1 id="step-title">${copy.title}</h1></div>${content}`;
   elements.simulation.hidden = !new Set(["simulate", "challenge"]).has(step);
   elements.back.disabled = state.lesson.stepIndex === 0;
@@ -200,6 +249,53 @@ function bindStepEvents() {
     state.blockSize = Number(event.target.value);
     resetSimulation();
   });
+  document.querySelectorAll("[data-run-provider]").forEach((button) => {
+    button.addEventListener("click", () => runRealGpu(button.dataset.runProvider));
+  });
+}
+
+async function loadCapabilities() {
+  try {
+    const response = await fetch("/api/capabilities");
+    if (!response.ok) throw new Error("Companion API unavailable");
+    state.capabilities = await response.json();
+  } catch (_error) {
+    state.capabilities = { providers: [
+      { id: "apple-mlx", available: false, reason: "Start with `python learning-lab/server.py` to enable real GPU runs." },
+      { id: "modal-triton", available: false, reason: "Start the companion server and authenticate Modal first." },
+    ] };
+  }
+  if (currentStep() === "run") renderStep();
+}
+
+async function runRealGpu(provider) {
+  const confirmed = provider === "modal-triton"
+    ? document.querySelector("#modal-confirm")?.checked === true
+    : false;
+  if (provider === "modal-triton" && !confirmed) {
+    state.executionError = "Confirm the billable Modal L4 run before launching.";
+    renderStep();
+    return;
+  }
+  state.executionRunning = true;
+  state.executionError = null;
+  state.executionResult = null;
+  renderStep();
+  try {
+    const response = await fetch("/api/run", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ provider, group_size: state.blockSize, confirmed: provider === "modal-triton" }),
+    });
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload.error || "GPU execution failed");
+    state.executionResult = payload;
+  } catch (error) {
+    state.executionError = error.message;
+  } finally {
+    state.executionRunning = false;
+    renderStep();
+  }
 }
 
 function resetSimulation() {
@@ -292,3 +388,4 @@ elements.run.addEventListener("click", runSimulation);
 elements.reset.addEventListener("click", resetSimulation);
 
 renderStep();
+loadCapabilities();

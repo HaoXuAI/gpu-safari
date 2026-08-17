@@ -15,6 +15,10 @@ const LESSON_COPY = Object.freeze({
     eyebrow: "Reveal the code",
     title: "The same idea, three levels closer to the GPU",
   },
+  run: {
+    eyebrow: "Measured execution",
+    title: "Run the idea on a real GPU",
+  },
   explain: {
     eyebrow: "Build the mental model",
     title: "Every worker needs an identity and a destination",
