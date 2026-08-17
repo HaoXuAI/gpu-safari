@@ -6,6 +6,7 @@ GPU Safari is a vendor-neutral curriculum and experiment gallery. Start with a g
 
 ## Start here
 
+- New to GPU programming? Begin with the interactive [Paint Pixels in Parallel](learning-lab/) learning lab. It runs in a browser without a GPU and connects familiar Python ideas to Triton and CUDA.
 - Learn the foundations: execution models, memory, correctness, profiling, and benchmarking.
 - Run the first experiment: [CUDA reduction](experiments/cuda/reduction/README.md).
 - Continue with [CUDA matrix multiplication](experiments/cuda/matmul/README.md).
