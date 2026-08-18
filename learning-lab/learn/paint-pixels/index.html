@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Learn GPU programming by watching parallel workers paint an image.">
+    <title>Paint Pixels in Parallel · GPU Safari</title>
+    <link rel="stylesheet" href="../../styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="../../" aria-label="GPU Safari home"><span class="brand-mark" aria-hidden="true">GS</span><span>GPU Safari</span></a>
+      <div class="trail-name"><span class="trail-label">Trail 01</span><span>First parallel steps</span></div>
+    </header>
+    <main id="lesson" class="lesson-shell">
+      <aside class="lesson-rail" aria-label="Lesson progress">
+        <div class="rail-heading"><span class="rail-kicker">Lesson 1</span><strong>Paint Pixels in Parallel</strong></div>
+        <ol id="progress-list" class="progress-list"></ol>
+        <div class="rail-note"><span class="status-dot" aria-hidden="true"></span>No GPU required</div>
+      </aside>
+      <section class="lesson-stage" aria-labelledby="step-title">
+        <div class="stage-topline"><span id="step-count">Step 1 of 7</span><span id="execution-mode" class="simulation-label">Concept simulation</span></div>
+        <div id="step-content" class="step-content" aria-live="polite"></div>
+        <section id="simulation-panel" class="simulation-panel" hidden aria-labelledby="simulation-heading">
+          <div class="simulation-toolbar">
+            <div><span class="section-label">2D work map</span><h2 id="simulation-heading">64 pixels · 64 active threads</h2></div>
+            <div class="simulation-actions"><button id="reset-simulation" class="button button-quiet" type="button">Reset</button><button id="run-simulation" class="button button-primary" type="button">Run simulation</button></div>
+          </div>
+          <div class="work-map-layout">
+            <div><div id="pixel-grid" class="pixel-grid" role="group" aria-label="Image pixel work map; use arrow keys to move between threads"></div><p id="simulation-status" class="simulation-status" aria-live="polite">Ready. Each square is one pixel waiting for a thread.</p></div>
+            <aside id="thread-inspector" class="thread-inspector" aria-live="polite"><span class="section-label">Thread inspector</span><strong>Select a pixel</strong><p>Run the simulation, then choose any square to trace its worker.</p></aside>
+          </div>
+        </section>
+        <footer class="lesson-controls"><button id="back-button" class="button button-quiet" type="button">← Back</button><button id="next-button" class="button button-primary" type="button">Continue →</button></footer>
+      </section>
+    </main>
+    <noscript>This guided lab requires JavaScript for its interactive simulation.</noscript>
+    <script type="module" src="../../src/app.mjs"></script>
+  </body>
+</html>

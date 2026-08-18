@@ -3,76 +3,49 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Learn GPU programming by watching parallel workers paint an image.">
-    <title>Paint Pixels in Parallel · GPU Safari</title>
-    <link rel="stylesheet" href="./styles.css">
+    <meta name="description" content="Learn GPU programming through visual, platform-neutral expeditions.">
+    <title>GPU Safari · See parallel work come alive</title>
+    <link rel="stylesheet" href="./site.css">
   </head>
   <body>
-    <header class="site-header">
-      <a class="brand" href="../README.md" aria-label="GPU Safari home">
-        <span class="brand-mark" aria-hidden="true">GS</span>
-        <span>GPU Safari</span>
-      </a>
-      <div class="trail-name">
-        <span class="trail-label">Trail 01</span>
-        <span>First parallel steps</span>
-      </div>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="public-header">
+      <a class="public-brand" href="./" aria-label="GPU Safari home"><span class="brand-mark" aria-hidden="true">GS</span><span>GPU Safari</span></a>
+      <nav class="public-nav" aria-label="Primary navigation"><a href="./trails/">Trails</a><a href="https://github.com/HaoXuAI/gpu-safari">Contribute</a><a class="nav-github" href="https://github.com/HaoXuAI/gpu-safari">View on GitHub</a></nav>
     </header>
 
-    <main id="lesson" class="lesson-shell">
-      <aside class="lesson-rail" aria-label="Lesson progress">
-        <div class="rail-heading">
-          <span class="rail-kicker">Lesson 1</span>
-          <strong>Paint Pixels in Parallel</strong>
+    <main id="main">
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">Trail 01 · First parallel steps</span>
+          <h1>See parallel work come alive.</h1>
+          <p class="hero-lede">Predict what happens, watch GPU workers paint an image together, then connect the picture to real Metal, Triton, and CUDA code.</p>
+          <div class="hero-actions"><a id="primary-lesson-link" class="button button-primary">Loading lesson…</a><a class="button button-secondary" href="#journey">See how it works</a></div>
+          <p class="friction-note">No GPU, install, or account required.</p>
         </div>
-        <ol id="progress-list" class="progress-list"></ol>
-        <div class="rail-note">
-          <span class="status-dot" aria-hidden="true"></span>
-          No GPU required
-        </div>
-      </aside>
+      </section>
 
-      <section class="lesson-stage" aria-labelledby="step-title">
-        <div class="stage-topline">
-          <span id="step-count">Step 1 of 6</span>
-          <span id="execution-mode" class="simulation-label">Concept simulation</span>
-        </div>
+      <section id="journey" class="journey" aria-labelledby="journey-title">
+        <span class="eyebrow">Your first expedition</span><h2 id="journey-title">From intuition to a real kernel</h2>
+        <ol>
+          <li><span class="journey-number">01</span><strong>Predict</strong><p>Commit to an answer before the reveal.</p></li>
+          <li><span class="journey-number">02</span><strong>Visualize</strong><p>Watch workers map themselves onto pixels.</p></li>
+          <li><span class="journey-number">03</span><strong>Run</strong><p>Optionally measure the idea on real hardware.</p></li>
+          <li><span class="journey-number">04</span><strong>Explain</strong><p>Translate the visual into GPU vocabulary.</p></li>
+        </ol>
+      </section>
 
-        <div id="step-content" class="step-content" aria-live="polite"></div>
+      <section class="light-section" aria-labelledby="start-title"><div class="section-inner"><div class="section-heading"><div><span class="eyebrow">Available now</span><h2 id="start-title">Begin with one picture and 64 workers.</h2></div></div><div id="featured-lesson"></div></div></section>
 
-        <section id="simulation-panel" class="simulation-panel" hidden aria-labelledby="simulation-heading">
-          <div class="simulation-toolbar">
-            <div>
-              <span class="section-label">2D work map</span>
-              <h2 id="simulation-heading">64 pixels · 64 active threads</h2>
-            </div>
-            <div class="simulation-actions">
-              <button id="reset-simulation" class="button button-quiet" type="button">Reset</button>
-              <button id="run-simulation" class="button button-primary" type="button">Run simulation</button>
-            </div>
-          </div>
-
-          <div class="work-map-layout">
-            <div>
-              <div id="pixel-grid" class="pixel-grid" role="group" aria-label="Image pixel work map; use arrow keys to move between threads"></div>
-              <p id="simulation-status" class="simulation-status" aria-live="polite">Ready. Each square is one pixel waiting for a thread.</p>
-            </div>
-            <aside id="thread-inspector" class="thread-inspector" aria-live="polite">
-              <span class="section-label">Thread inspector</span>
-              <strong>Select a pixel</strong>
-              <p>Run the simulation, then choose any square to trace its worker.</p>
-            </aside>
-          </div>
-        </section>
-
-        <footer class="lesson-controls">
-          <button id="back-button" class="button button-quiet" type="button">← Back</button>
-          <button id="next-button" class="button button-primary" type="button">Continue →</button>
-        </footer>
+      <section class="dark-section" aria-labelledby="future-title">
+        <div class="section-heading"><div><span class="eyebrow">The wider ecosystem</span><h2 id="future-title">One mental model. Many GPU trails.</h2></div><a href="./trails/">View every trail <span aria-hidden="true">→</span></a></div>
+        <div id="trail-preview" class="trail-grid"></div>
+        <div class="section-heading" style="margin-top:80px"><div><span class="eyebrow">Take it further</span><h2>Feel the difference on real hardware.</h2></div></div>
+        <div class="take-further"><article class="hardware-card"><span>Local · No cloud charge</span><h3>Run on an Apple GPU</h3><p>The optional companion launches a custom Metal kernel through MLX on Apple Silicon.</p></article><article class="hardware-card"><span>Cloud · Explicit confirmation</span><h3>Run on an NVIDIA GPU</h3><p>Use a supported provider after reviewing the accelerator, quota, and possible cost.</p></article></div>
       </section>
     </main>
-
-    <noscript>This guided lab requires JavaScript for its interactive simulation.</noscript>
-    <script type="module" src="./src/app.mjs"></script>
+    <footer class="public-footer"><span>GPU Safari · Learn GPUs by seeing the work.</span><a href="https://github.com/HaoXuAI/gpu-safari">Open-source on GitHub</a></footer>
+    <noscript>The guided website requires JavaScript to load lesson information.</noscript>
+    <script type="module" src="./src/home.mjs"></script>
   </body>
 </html>
