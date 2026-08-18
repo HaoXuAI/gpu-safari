@@ -19,6 +19,7 @@ test("a new lesson starts at the story with no prediction", () => {
     "predict",
     "simulate",
     "code",
+    "run",
     "explain",
     "challenge",
   ]);
