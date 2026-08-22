@@ -1,8 +1,28 @@
+from html.parser import HTMLParser
 from pathlib import Path
 
 
 ROOT = Path(__file__).parents[1]
 LAB = ROOT / "learning-lab"
+
+
+class _WorkMapParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.in_work_map = False
+        self.content = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "pre" and ("id", "gpu-work-map") in attrs:
+            self.in_work_map = True
+
+    def handle_endtag(self, tag):
+        if tag == "pre":
+            self.in_work_map = False
+
+    def handle_data(self, data):
+        if self.in_work_map:
+            self.content.append(data)
 
 
 def test_learning_lab_has_platform_neutral_static_entrypoint():
@@ -101,6 +121,22 @@ def test_homepage_leads_with_guided_expedition_and_optional_hardware():
     assert "Take it further" in home
     assert 'id="featured-lesson"' in home
     assert 'src="./src/home.mjs"' in home
+
+
+def test_homepage_gpu_work_map_has_aligned_fixed_width_edges():
+    parser = _WorkMapParser()
+    home = (LAB / "index.html").read_text()
+    parser.feed(home)
+
+    lines = "".join(parser.content).strip("\n").splitlines()
+
+    assert lines
+    assert len(lines) == 12
+    assert {len(line) for line in lines} == {40}
+    assert lines[0].startswith("╔═ GPU WORK MAP ")
+    assert lines[-1] == "╚" + "═" * 38 + "╝"
+    assert 'id="gpu-work-map" role="img"' in home
+    assert 'aria-label="One CPU instruction distributed across many GPU workers"' in home
 
 
 def test_trail_map_renders_from_shared_catalog():

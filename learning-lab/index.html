@@ -7,26 +7,42 @@
     <title>GPU Safari · See parallel work come alive</title>
     <link rel="stylesheet" href="./site.css">
   </head>
-  <body>
+  <body class="expedition-home">
     <a class="skip-link" href="#main">Skip to content</a>
-    <header class="public-header">
-      <a class="public-brand" href="./" aria-label="GPU Safari home"><span class="brand-mark" aria-hidden="true">GS</span><span>GPU Safari</span></a>
-      <nav class="public-nav" aria-label="Primary navigation"><a href="./trails/">Trails</a><a href="https://github.com/HaoXuAI/gpu-safari">Contribute</a><a class="nav-github" href="https://github.com/HaoXuAI/gpu-safari">View on GitHub</a></nav>
+    <header class="public-header expedition-header">
+      <a class="public-brand" href="./" aria-label="GPU Safari home"><span class="brand-mark" aria-hidden="true">GS</span><span>GPU SAFARI</span></a>
+      <nav class="public-nav" aria-label="Primary navigation"><a href="./trails/">[ TRAILS ]</a><a href="https://github.com/HaoXuAI/gpu-safari">[ CONTRIBUTE ]</a><a class="nav-github" href="https://github.com/HaoXuAI/gpu-safari">GITHUB ↗</a></nav>
     </header>
 
     <main id="main">
       <section class="hero">
         <div class="hero-copy">
-          <span class="eyebrow">Trail 01 · First parallel steps</span>
-          <h1>See parallel work come alive.</h1>
+          <span class="eyebrow">Expedition 01 // First parallel steps</span>
+          <h1>See parallel<br>work <em>come alive.</em></h1>
           <p class="hero-lede">Predict what happens, watch GPU workers paint an image together, then connect the picture to real Metal, Triton, and CUDA code.</p>
-          <div class="hero-actions"><a id="primary-lesson-link" class="button button-primary">Loading lesson…</a><a class="button button-secondary" href="#journey">See how it works</a></div>
-          <p class="friction-note">No GPU, install, or account required.</p>
+          <div class="hero-actions"><a id="primary-lesson-link" class="button button-primary">Loading lesson…</a><a class="button button-secondary" href="#journey">VIEW FIELD GUIDE ↓</a></div>
+          <p class="friction-note"><span aria-hidden="true">●</span> No GPU, install, or account required.</p>
+        </div>
+        <div class="work-map-shell">
+          <div class="terminal-bar" aria-hidden="true"><span>VISUAL_001</span><span>PARALLEL WORK</span></div>
+          <pre id="gpu-work-map" role="img" aria-label="One CPU instruction distributed across many GPU workers">╔═ GPU WORK MAP ═══════════════════════╗
+║                                      ║
+║  CPU        instruction              ║
+║   01   ───────────────────┐          ║
+║                           ▼          ║
+║  GPU WORKERS                         ║
+║   00 01 02 03 04 05 06 07            ║
+║   08 09 10 11 12 13 14 15            ║
+║   16 17 18 19 20 21 22 23            ║
+║   … one worker → one pixel           ║
+║                                      ║
+╚══════════════════════════════════════╝</pre>
+          <p>One instruction. Many workers. A picture appears.</p>
         </div>
       </section>
 
       <section id="journey" class="journey" aria-labelledby="journey-title">
-        <span class="eyebrow">Your first expedition</span><h2 id="journey-title">From intuition to a real kernel</h2>
+        <span class="eyebrow">Field guide // Your first expedition</span><h2 id="journey-title">From intuition to a <em>real kernel.</em></h2>
         <ol>
           <li><span class="journey-number">01</span><strong>Predict</strong><p>Commit to an answer before the reveal.</p></li>
           <li><span class="journey-number">02</span><strong>Visualize</strong><p>Watch workers map themselves onto pixels.</p></li>
@@ -35,16 +51,16 @@
         </ol>
       </section>
 
-      <section class="light-section" aria-labelledby="start-title"><div class="section-inner"><div class="section-heading"><div><span class="eyebrow">Available now</span><h2 id="start-title">Begin with one picture and 64 workers.</h2></div></div><div id="featured-lesson"></div></div></section>
+      <section class="light-section" aria-labelledby="start-title"><div class="section-inner"><div class="section-heading"><div><span class="eyebrow">Lesson log // Available now</span><h2 id="start-title">Begin with one picture<br>and <em>64 workers.</em></h2></div><span class="field-stamp" aria-hidden="true">READY<br>TO EXPLORE</span></div><div id="featured-lesson"></div></div></section>
 
       <section class="dark-section" aria-labelledby="future-title">
-        <div class="section-heading"><div><span class="eyebrow">The wider ecosystem</span><h2 id="future-title">One mental model. Many GPU trails.</h2></div><a href="./trails/">View every trail <span aria-hidden="true">→</span></a></div>
+        <div class="section-heading"><div><span class="eyebrow">Map room // The wider ecosystem</span><h2 id="future-title">One mental model.<br>Many GPU trails.</h2></div><a href="./trails/">VIEW EVERY TRAIL →</a></div>
         <div id="trail-preview" class="trail-grid"></div>
-        <div class="section-heading" style="margin-top:80px"><div><span class="eyebrow">Take it further</span><h2>Feel the difference on real hardware.</h2></div></div>
+        <div class="section-heading further-heading"><div><span class="eyebrow">Optional route // Take it further</span><h2>Feel the difference<br>on real hardware.</h2></div></div>
         <div class="take-further"><article class="hardware-card"><span>Local · No cloud charge</span><h3>Run on an Apple GPU</h3><p>The optional companion launches a custom Metal kernel through MLX on Apple Silicon.</p></article><article class="hardware-card"><span>Cloud · Explicit confirmation</span><h3>Run on an NVIDIA GPU</h3><p>Use a supported provider after reviewing the accelerator, quota, and possible cost.</p></article></div>
       </section>
     </main>
-    <footer class="public-footer"><span>GPU Safari · Learn GPUs by seeing the work.</span><a href="https://github.com/HaoXuAI/gpu-safari">Open-source on GitHub</a></footer>
+    <footer class="public-footer"><span>GPU SAFARI // Learn GPUs by seeing the work.</span><a href="https://github.com/HaoXuAI/gpu-safari">OPEN-SOURCE ON GITHUB ↗</a></footer>
     <noscript>The guided website requires JavaScript to load lesson information.</noscript>
     <script type="module" src="./src/home.mjs"></script>
   </body>

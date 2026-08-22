@@ -10,6 +10,10 @@
   --trail-dark: #092116;
   --sand: #f1e4c4;
   --sand-ink: #26352c;
+  --signal: #ff6b35;
+  --electric: #66b5ff;
+  --paper: #f3e9cf;
+  --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --max: 1180px;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -76,6 +80,51 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--trail); outline
 .trail-page-grid { max-width: var(--max); margin: auto; padding: 0 28px 90px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 .public-footer { max-width: var(--max); margin: auto; padding: 40px 28px; display: flex; justify-content: space-between; gap: 20px; color: var(--muted); border-top: 1px solid var(--line); }
 
+/* Homepage: expedition terminal meets a field notebook. */
+.expedition-home { background-color: var(--night); background-image: linear-gradient(rgba(121,239,169,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(121,239,169,.025) 1px, transparent 1px); background-size: 28px 28px; }
+.expedition-home .public-header { max-width: none; padding: 18px max(28px, calc((100vw - var(--max)) / 2)); border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 13px; }
+.expedition-home .public-brand { letter-spacing: .06em; }
+.expedition-home .brand-mark { width: 34px; height: 34px; border: 1px solid var(--trail); border-radius: 0; background: transparent; color: var(--trail); }
+.expedition-home .public-nav a { font-weight: 700; letter-spacing: .04em; }
+.expedition-home .nav-github { border-radius: 0; background: var(--trail); color: var(--trail-dark); box-shadow: 4px 4px 0 #244d39; }
+.expedition-home .eyebrow, .expedition-home .card-kicker { font-family: var(--mono); letter-spacing: .08em; }
+.expedition-home em { color: var(--trail); font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
+.expedition-home .hero { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(420px, .92fr); align-items: center; gap: clamp(42px, 6vw, 88px); margin-top: 0; padding-top: clamp(72px, 10vw, 126px); padding-bottom: clamp(82px, 11vw, 140px); }
+.expedition-home .hero::after { width: 600px; height: 600px; right: -260px; top: -150px; border-radius: 0; background: radial-gradient(circle, rgba(102,181,255,.09), transparent 65%); }
+.expedition-home .hero-copy { max-width: 690px; }
+.expedition-home .hero h1 { margin-top: 20px; font-size: clamp(56px, 7.4vw, 102px); line-height: .87; letter-spacing: -.07em; }
+.expedition-home .hero-lede { max-width: 610px; font-size: clamp(17px, 1.7vw, 20px); }
+.expedition-home .button { min-height: 52px; border-radius: 0; font-family: var(--mono); font-size: 13px; letter-spacing: .04em; box-shadow: 5px 5px 0 #244d39; }
+.expedition-home .button-secondary { box-shadow: none; }
+.expedition-home .friction-note { font-family: var(--mono); font-size: 12px; }
+.expedition-home .friction-note span { color: var(--trail); }
+.work-map-shell { position: relative; z-index: 1; min-width: 0; border: 1px solid var(--electric); background: #07100d; box-shadow: 12px 12px 0 rgba(102,181,255,.15); transform: rotate(1.25deg); }
+.terminal-bar { display: flex; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--electric); background: rgba(102,181,255,.08); color: var(--electric); font: 700 11px/1 var(--mono); letter-spacing: .08em; }
+.work-map-shell pre { overflow: hidden; margin: 0; padding: clamp(18px, 2.5vw, 30px); color: var(--trail); font: clamp(9px, 1.05vw, 13px)/1.62 var(--mono); }
+.work-map-shell > p { margin: 0; padding: 12px 16px; border-top: 1px solid var(--line); color: var(--muted); font: 11px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .05em; }
+.expedition-home .journey { padding-bottom: 104px; }
+.expedition-home .journey h2, .expedition-home .section-heading h2 { margin: 12px 0 32px; }
+.expedition-home .journey h2 { max-width: 800px; font-size: clamp(40px, 5.5vw, 68px); line-height: .96; letter-spacing: -.05em; }
+.expedition-home .journey ol { counter-reset: expedition-step; gap: 0; border: 1px solid var(--line); }
+.expedition-home .journey li { min-height: 180px; padding: 24px; border: 0; border-right: 1px solid var(--line); border-radius: 0; background: rgba(13,33,25,.82); }
+.expedition-home .journey li:last-child { border-right: 0; }
+.expedition-home .journey-number { margin-bottom: 40px; font: 700 12px/1 var(--mono); }
+.expedition-home .journey strong { font-size: 22px; }
+.expedition-home .light-section { background-color: var(--paper); background-image: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(38,53,44,.08) 28px); }
+.expedition-home .light-section em { color: #17603c; }
+.expedition-home .section-inner, .expedition-home .dark-section { padding-top: 108px; padding-bottom: 108px; }
+.expedition-home .section-heading { position: relative; }
+.expedition-home .field-stamp { padding: 12px 16px; border: 2px solid #17603c; color: #17603c; font: 800 12px/1.25 var(--mono); text-align: center; transform: rotate(3deg); opacity: .72; }
+.expedition-home .lesson-card { border: 2px solid var(--sand-ink); border-radius: 0; background: #fff9e9; box-shadow: 10px 10px 0 rgba(38,53,44,.18); }
+.expedition-home .lesson-card .card-action, .expedition-home .section-heading > a { font-family: var(--mono); }
+.expedition-home .trail-grid { gap: 18px; }
+.expedition-home .trail-card, .expedition-home .hardware-card { border-radius: 0; box-shadow: 7px 7px 0 rgba(49,83,69,.35); }
+.expedition-home .trail-card-available { border-color: var(--trail); }
+.expedition-home .trail-card::before { content: "[ FIELD NOTE ]"; color: var(--electric); font: 700 10px/1 var(--mono); letter-spacing: .06em; }
+.expedition-home .further-heading { margin-top: 88px; }
+.expedition-home .hardware-card span, .expedition-home .card-meta, .expedition-home .availability { font-family: var(--mono); }
+.expedition-home .public-footer { font-family: var(--mono); font-size: 12px; }
+
 @media (max-width: 780px) {
   .public-header { align-items: flex-start; }
   .public-nav { gap: 12px; font-size: 14px; }
@@ -86,6 +135,18 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--trail); outline
   .lesson-card p, .lesson-card strong { grid-column: 1; grid-row: auto; }
   .lesson-card .card-action { justify-self: start; margin-top: 15px; }
   .section-heading, .public-footer { align-items: flex-start; flex-direction: column; }
+  .expedition-home .hero { grid-template-columns: 1fr; }
+  .work-map-shell { width: min(100%, 510px); transform: none; }
+  .expedition-home .journey li { border-right: 0; border-bottom: 1px solid var(--line); }
+  .expedition-home .journey li:last-child { border-bottom: 0; }
+  .expedition-home .field-stamp { display: none; }
+}
+
+@media (max-width: 480px) {
+  .expedition-home .public-header { padding-inline: 18px; }
+  .expedition-home .public-nav a:not(:first-child) { display: none; }
+  .expedition-home .hero, .expedition-home .journey, .expedition-home .dark-section, .expedition-home .section-inner { padding-left: 18px; padding-right: 18px; }
+  .work-map-shell pre { overflow-x: auto; font-size: clamp(7.3px, 2.35vw, 10px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
